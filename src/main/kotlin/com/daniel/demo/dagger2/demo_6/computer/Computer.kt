@@ -5,6 +5,8 @@ import com.daniel.demo.dagger2.demo_6.computer.cpu.Cpu
 import com.daniel.demo.dagger2.demo_6.computer.disk.Disk
 import com.daniel.demo.dagger2.demo_6.computer.memory.Memory
 import com.daniel.demo.dagger2.demo_6.computer.board.Board
+import com.daniel.demo.dagger2.demo_6.computer.gpu.Gpu
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Provider
@@ -32,6 +34,9 @@ class Computer @Inject constructor() {
     lateinit var cpus: List<Cpu>
 
     @Inject
+    lateinit var gpu: Optional<Gpu>
+
+    @Inject
     fun init() {
         val cpu1 = cpuProvider.get()
         val cpu2 = cpuProvider.get()
@@ -40,6 +45,8 @@ class Computer @Inject constructor() {
 
         memories.forEach { board.mount(it) }
         disks.forEach { (_, disk) -> board.mount(disk) }
+
+        if (gpu.isPresent) board.mount(gpu.get())
     }
 
     fun info(): String {
